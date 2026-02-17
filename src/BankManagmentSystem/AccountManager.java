@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 public class AccountManager {
-    private Scanner sc;
-    private Connection connection;
+    private final Scanner sc;
+    private final Connection connection;
     public AccountManager(Connection connection, Scanner sc){
         this.connection = connection;
         this.sc = sc;
@@ -17,12 +17,12 @@ public class AccountManager {
         if(accountNumber ==0){
             throw new RuntimeException("Error in fetching AccountNumber ");
         }
-        double realBalance = 0;
+        double realBalance;
         sc.nextLine();
         System.out.println("Enter Amount to Withdraw::");
         double debitAmount = sc.nextDouble();
         if(debitAmount<=0){
-            System.out.println("Amout is too Small..! Please try with Larger Amounts..!");
+            System.out.println("Amount is too Small..! Please try with Larger Amounts..!");
             return;
         }
         sc.nextLine();
@@ -45,8 +45,8 @@ public class AccountManager {
                     int rowsEffected = preparedStatement1.executeUpdate();
                     if(rowsEffected>0){
                         System.out.println("Success!!! Amount Withdrawn:: $"+debitAmount);
-                        String trasactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'DEBIT',?, NULL)";
-                        PreparedStatement preparedStatement2 = connection.prepareStatement(trasactionQuery);
+                        String transactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'DEBIT',?, NULL)";
+                        PreparedStatement preparedStatement2 = connection.prepareStatement(transactionQuery);
                         preparedStatement2.setLong(1,accountNumber);
                         preparedStatement2.setDouble(2,debitAmount);
                         int transactionDone = preparedStatement2.executeUpdate();
@@ -78,12 +78,11 @@ public class AccountManager {
         if(accountNumber ==0){
             throw new RuntimeException("Error in fetching AccountNumber ");
         }
-        double realBalance = 0;
         sc.nextLine();
         System.out.println("Enter Amount to be Credited::");
         double creditAmount = sc.nextDouble();
         if(creditAmount<=0){
-            System.out.println("Amout is too Small..! Please try with Larger Amounts..!");
+            System.out.println("Amount is too Small..! Please try with Larger Amounts..!");
             return;
         }
         sc.nextLine();
@@ -99,8 +98,8 @@ public class AccountManager {
             int rowsEffected = preparedStatement.executeUpdate();
             if(rowsEffected>0){
                 System.out.println("Amount Credited Successfully..!");
-                String trasactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'CREDIT',?, NULL)";
-                PreparedStatement preparedStatement2 = connection.prepareStatement(trasactionQuery);
+                String transactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'CREDIT',?, NULL)";
+                PreparedStatement preparedStatement2 = connection.prepareStatement(transactionQuery);
                 preparedStatement2.setLong(1,accountNumber);
                 preparedStatement2.setDouble(2,creditAmount);
                 int transactionDone = preparedStatement2.executeUpdate();
@@ -161,10 +160,10 @@ public class AccountManager {
                         preparedStatement3.setLong(2,receiverAccount);
                         int rowsEffected2 = preparedStatement3.executeUpdate();
                         if(rowsEffected2>0 && rowsEffected1>0){
-                            System.out.println("!.....Transfer Successfull......!");
+                            System.out.println("!.....Transferred Successfully......!");
                             System.out.println("Amount : "+sendAmount+" sent Successfully to "+resultSet1.getString("full_name"));
-                            String trasactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,?,?, ?)";
-                            PreparedStatement preparedStatement4 = connection.prepareStatement(trasactionQuery);
+                            String transactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,?,?, ?)";
+                            PreparedStatement preparedStatement4 = connection.prepareStatement(transactionQuery);
                             preparedStatement4.setLong(1,accountNumber);
                             preparedStatement4.setDouble(3,sendAmount);
                             preparedStatement4.setString(2,"DEBIT");
@@ -203,11 +202,11 @@ public class AccountManager {
             else{
                 System.out.println("Incorrect Security PIN...");
             }
-
+            connection.setAutoCommit(true);
         }catch (SQLException e){
+            connection.setAutoCommit(true);
             System.out.println(e.getMessage());
         }
-
 
 
     }

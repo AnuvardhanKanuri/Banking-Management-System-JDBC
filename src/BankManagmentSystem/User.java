@@ -5,8 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 public class User {
-    private Scanner sc;
-    private Connection connection;
+    private final Scanner sc;
+    private final Connection connection;
     public User(Connection connection, Scanner sc){
         this.connection = connection;
         this.sc = sc;
@@ -77,12 +77,7 @@ public class User {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, email);
             ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next()){
-                return true;
-            }
-            else{
-                return false;
-            }
+            return resultSet.next();
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }

@@ -1,14 +1,14 @@
 package BankManagmentSystem;
 
 import java.sql.*;
-import java.util.Scanner;
+
 
 public class TransactionDetails {
-    private Connection connection;
-    private Scanner sc;
-    public TransactionDetails(Connection connection, Scanner sc){
+    private final Connection connection;
+
+    public TransactionDetails(Connection connection){
         this.connection = connection;
-        this.sc = sc;
+
     }
     public void showTransactions(Long accountNumber){
         String query = "SELECT *FROM transactions WHERE account_number = ? ORDER BY transaction_time DESC";

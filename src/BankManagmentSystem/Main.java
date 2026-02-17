@@ -21,8 +21,8 @@ public class Main {
             User user = new User(connection, sc);
             Accounts accounts = new Accounts(connection, sc);
             AccountManager Manager = new AccountManager(connection, sc);
-            TransactionDetails transactionDetails = new TransactionDetails(connection, sc);
-            System.out.println("Welcome to Anuvardhan Financial Services");
+            TransactionDetails transactionDetails = new TransactionDetails(connection);
+            System.out.println("Welcome to Financial Services");
             System.out.println("----------------------------------------");
             while(true) {
                 System.out.println("Choose option below\n1.Login to Account\n2.Register new Account\n3.Exit");
@@ -43,7 +43,7 @@ public class Main {
                                 }
                             }
                             accountNumber = accounts.getAccountNumber(email);
-                            int choice2=0;
+                            int choice2;
                             while (true) {
                                 System.out.println();
                                 System.out.println("1. Debit Money");

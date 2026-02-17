@@ -4,8 +4,8 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Accounts {
-    private Connection connection;
-    private Scanner sc;
+    private final Connection connection;
+    private final Scanner sc;
     public Accounts(Connection connection, Scanner sc){
         this.connection = connection;
         this.sc = sc;
@@ -46,7 +46,7 @@ public class Accounts {
         System.out.println("Enter Full name::");
         String fullName = sc.nextLine().toUpperCase();
         System.out.println("Enter Initial Deposit::");
-        Double amount = sc.nextDouble();
+        double amount = sc.nextDouble();
         sc.nextLine();
         System.out.println("Enter Security PIN for Bank Transactions..::");
         String pin = sc.nextLine();
@@ -61,13 +61,13 @@ public class Accounts {
             int rowsEffected = preparedStatement.executeUpdate();
             if(rowsEffected>0){
                 System.out.println("Account created Successfully...!\nAccount number::"+accountNumber);
-                String trasactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'Creation',?, NULL)";
-                PreparedStatement preparedStatement2 = connection.prepareStatement(trasactionQuery);
+                String transactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'Creation',?, NULL)";
+                PreparedStatement preparedStatement2 = connection.prepareStatement(transactionQuery);
                 preparedStatement2.setLong(1,accountNumber);
                 preparedStatement2.setDouble(2,amount);
                 preparedStatement2.executeUpdate();
 
-                return ;
+
             }
             else {
                 throw new RuntimeException("Account Creation Failed..!");
