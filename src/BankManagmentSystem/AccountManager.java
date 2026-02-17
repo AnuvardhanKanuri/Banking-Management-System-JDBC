@@ -45,6 +45,17 @@ public class AccountManager {
                     int rowsEffected = preparedStatement1.executeUpdate();
                     if(rowsEffected>0){
                         System.out.println("Success!!! Amount Withdrawn:: $"+debitAmount);
+                        String trasactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'DEBIT',?, NULL)";
+                        PreparedStatement preparedStatement2 = connection.prepareStatement(trasactionQuery);
+                        preparedStatement2.setLong(1,accountNumber);
+                        preparedStatement2.setDouble(2,debitAmount);
+                        int transactionDone = preparedStatement2.executeUpdate();
+                        if(transactionDone>0){
+                            System.out.println("Done....! Added to transaction table");
+                        }
+                        else{
+                            System.out.println("Failed to add into Transaction table");
+                        }
                     }
                 }
                 else{
@@ -88,6 +99,17 @@ public class AccountManager {
             int rowsEffected = preparedStatement.executeUpdate();
             if(rowsEffected>0){
                 System.out.println("Amount Credited Successfully..!");
+                String trasactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'CREDIT',?, NULL)";
+                PreparedStatement preparedStatement2 = connection.prepareStatement(trasactionQuery);
+                preparedStatement2.setLong(1,accountNumber);
+                preparedStatement2.setDouble(2,creditAmount);
+                int transactionDone = preparedStatement2.executeUpdate();
+                if(transactionDone>0){
+                    System.out.println("Done....! Added to transaction table");
+                }
+                else{
+                    System.out.println("Failed to add into Transaction table");
+                }
             }
             else{
                 System.out.println("Incorrect Security PIN....!");
@@ -141,6 +163,25 @@ public class AccountManager {
                         if(rowsEffected2>0 && rowsEffected1>0){
                             System.out.println("!.....Transfer Successfull......!");
                             System.out.println("Amount : "+sendAmount+" sent Successfully to "+resultSet1.getString("full_name"));
+                            String trasactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,?,?, ?)";
+                            PreparedStatement preparedStatement4 = connection.prepareStatement(trasactionQuery);
+                            preparedStatement4.setLong(1,accountNumber);
+                            preparedStatement4.setDouble(3,sendAmount);
+                            preparedStatement4.setString(2,"DEBIT");
+                            preparedStatement4.setLong(4,receiverAccount);
+                            int transactionDone = preparedStatement4.executeUpdate();
+                            preparedStatement4.setLong(1,receiverAccount);
+                            preparedStatement4.setDouble(3,sendAmount);
+                            preparedStatement4.setString(2,"CREDIT");
+                            preparedStatement4.setLong(4,accountNumber);
+                            int transactionDone1 = preparedStatement4.executeUpdate();
+                            if(transactionDone>0 && transactionDone1>0){
+                                System.out.println("Done....! Added to transaction table");
+                            }
+                            else{
+                                System.out.println("Failed to add into Transaction table");
+                            }
+
                             connection.commit();
                             connection.setAutoCommit(true);
                             return;

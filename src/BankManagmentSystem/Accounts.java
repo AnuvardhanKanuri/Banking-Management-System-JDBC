@@ -61,6 +61,12 @@ public class Accounts {
             int rowsEffected = preparedStatement.executeUpdate();
             if(rowsEffected>0){
                 System.out.println("Account created Successfully...!\nAccount number::"+accountNumber);
+                String trasactionQuery = "INSERT INTO transactions(account_number, transaction_type, amount, related_account) VALUES(?,'Creation',?, NULL)";
+                PreparedStatement preparedStatement2 = connection.prepareStatement(trasactionQuery);
+                preparedStatement2.setLong(1,accountNumber);
+                preparedStatement2.setDouble(2,amount);
+                preparedStatement2.executeUpdate();
+
                 return ;
             }
             else {

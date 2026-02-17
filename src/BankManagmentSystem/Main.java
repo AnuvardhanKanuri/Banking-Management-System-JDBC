@@ -1,8 +1,5 @@
 package BankManagmentSystem;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.SQLOutput;
+import java.sql.*;
 import java.util.Scanner;
 
 public class Main {
@@ -24,6 +21,7 @@ public class Main {
             User user = new User(connection, sc);
             Accounts accounts = new Accounts(connection, sc);
             AccountManager Manager = new AccountManager(connection, sc);
+            TransactionDetails transactionDetails = new TransactionDetails(connection, sc);
             System.out.println("Welcome to Anuvardhan Financial Services");
             System.out.println("----------------------------------------");
             while(true) {
@@ -52,7 +50,7 @@ public class Main {
                                 System.out.println("2. Credit Money");
                                 System.out.println("3. Transfer Money");
                                 System.out.println("4. Check Balance");
-                                System.out.println("5. Log Out");
+                                System.out.println("6. Log Out");
                                 System.out.println("Enter your choice: ");
                                 choice2 = sc.nextInt();
                                 switch (choice2) {
@@ -69,6 +67,8 @@ public class Main {
                                         Manager.getBalance(accountNumber);
                                         break;
                                     case 5:
+                                        transactionDetails.showTransactions(accountNumber);
+                                    case 6:
                                         System.out.println("Thank You for Using Bank Services...!");
                                         System.out.println("User logged out successfully..");
                                         return;
