@@ -50,6 +50,7 @@ public class Main {
                                 System.out.println("2. Credit Money");
                                 System.out.println("3. Transfer Money");
                                 System.out.println("4. Check Balance");
+                                System.out.println("5. Check Transactions");
                                 System.out.println("6. Log Out");
                                 System.out.println("Enter your choice: ");
                                 choice2 = sc.nextInt();
@@ -68,6 +69,7 @@ public class Main {
                                         break;
                                     case 5:
                                         transactionDetails.showTransactions(accountNumber);
+                                        break;
                                     case 6:
                                         System.out.println("Thank You for Using Bank Services...!");
                                         System.out.println("User logged out successfully..");
